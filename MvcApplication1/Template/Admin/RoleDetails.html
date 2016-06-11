@@ -1,0 +1,56 @@
+﻿<!--<table class="table table-responsive" ng-repeat="vr in viewRoles">
+    <thead>
+        <tr>
+            <th>{{vr.MenuName}}</th>
+            <th><input type="checkbox" ng-disabled="viewRoelsDisabled" />View </th>
+            <th><input type="checkbox" ng-disabled="viewRoelsDisabled" />Edit</th>
+            <th><input type="checkbox" ng-disabled="viewRoelsDisabled" />Delete </th>
+        </tr>
+    </thead>
+    <tbody ng-repeat="cr in vr.ChildMenu">
+        <tr ng-class="$index%2==0?'odd':'even'">
+
+            <td>{{cr.MenuName}}</td>
+            <td><input type="checkbox" ng-checked="{{cr.MenuPermission|Bitwise :1}}" ng-disabled="viewRoelsDisabled" /></td>
+            <td><input type="checkbox" ng-checked="{{cr.MenuPermission|Bitwise :2}}" ng-disabled="viewRoelsDisabled" /></td>
+            <td><input type="checkbox" ng-checked="{{cr.MenuPermission|Bitwise :4}} " ng-disabled="viewRoelsDisabled" /></td>
+        </tr>
+    </tbody>
+</table>
+    -->
+
+<table class="table table-responsive" ng-repeat="vr in menuList| ParentMenu:101 ">
+    <thead>
+        <tr>
+            <th class="col-md-2" >{{vr.Name}}</th>
+            <th class="col-md-4" ng-class="'View_' + vr.Name+'_header'"><input type="checkbox" ng-disabled="viewRoelsDisabled" />View </th>
+            <th class="col-md-4" ng-class="'Edit_' + vr.Name+'_header'"><input type="checkbox" ng-disabled="viewRoelsDisabled" />Edit</th>
+            <th class="col-md-4" ng-class="'Delete_' + vr.Name+'_header'"><input type="checkbox" ng-disabled="viewRoelsDisabled" />Delete </th>
+        </tr>
+    </thead>
+    <tbody ng-repeat="cr in menuList|ChildMenu:102:vr.MenuId" >
+        <tr ng-class="$index%2==0?'odd':'even'">
+
+            <td >{{cr.Name}}</td>
+            <td ng-class="'View_' + vr.Name+$parent.$index"><input type="checkbox" ng-checked="{{cr.Permission|Bitwise :1}}" ng-disabled="viewRoelsDisabled" /></td>
+            <td ng-class="'Edit_' + vr.Name+$parent.$index"><input type="checkbox" ng-checked="{{cr.Permission|Bitwise :2}}" ng-disabled="viewRoelsDisabled" /></td>
+            <td ng-class="'Delete_' + vr.Name+$parent.$index"><input type="checkbox" ng-checked="{{cr.Permission|Bitwise :4}} " ng-disabled="viewRoelsDisabled" /></td>
+        </tr>
+        <tr ng-class="$index%2==0?'odd':'even'" ng-repeat="dr in menuList|ChildMenu:103:cr.MenuId">
+
+            <td>{{dr.Name}}</td>
+            <td ng-class="'View_' + vr.Name+$parent.$parent.$index"><input type="checkbox" ng-checked="{{dr.Permission|Bitwise :1}}" ng-disabled="viewRoelsDisabled" /></td>
+            <td ng-class="'Edit_' + vr.Name+$parent.$parent.$index"><input type="checkbox" ng-checked="{{dr.Permission|Bitwise :2}}" ng-disabled="viewRoelsDisabled" /></td>
+            <td ng-class="'Delete_' + vr.Name+$parent.$parent.$index"><input type="checkbox" ng-checked="{{dr.Permission|Bitwise :4}} " ng-disabled="viewRoelsDisabled" /></td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr ng-show="$last">
+            <td></td>
+            <td></td>
+            <td><button ng-show="!viewRoelsDisabled" class="btn btn-primary"><i class="glyphicon glyphicon-saved"></i> Save</button></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+    

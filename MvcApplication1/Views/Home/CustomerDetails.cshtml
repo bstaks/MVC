@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "ViewCustomer";
+}
+
+<div ng-app="myApp">
+
+    <customer-details></customer-details>
+
+</div>
+@section scripts{
+    @{
+        var routeValue = ViewContext.RouteData.Values["id"];
+        
+    }
+   
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/angular/app.js"></script>
+    <script src="~/angular/AdminController.js"></script>
+    <script src="~/Scripts/angular-route.js"></script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap.js"></script>
+<script type="text/javascript">
+        var id = @routeValue
+        , url ='@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "CustomerAPI", action = "GetCustomerDetailsById" })'
+</script>
+
+
+}

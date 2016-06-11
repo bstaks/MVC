@@ -1,0 +1,190 @@
+﻿@{
+    ViewBag.Title = "View Merchant ";
+}
+@section styles{
+
+    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/ui.jqgrid.min.css" rel="stylesheet" />
+
+}
+<div class="col-xs-12" ng-app="myApp" ng-controller="MerchantController">
+    <div class="form-group">
+        <label class="col-sm-3">Merchant Name</label>
+        <div class="col-sm-9">
+            <input type="text" id="txtMerchantName" ng-model="MerchantName" />
+            <button class="btn btn-primary" type="submit" ng-click="GetMerchant()"><i class="glyphicon glyphicon-search"></i>Search</button>
+        </div>
+
+    </div>
+    
+    <div class="col-xs-12">
+        <table class="table table-striped table-bordered table-hover" id="simple-table" ng-hide="data.length == 0">
+            <thead>
+                <tr>
+                    <th class="center">
+                        <label class="pos-rel">
+                            <input type="checkbox" class="headerace">
+                            <span class="lbl"></span>
+                        </label>
+                    </th>
+                    <th ng-click="sortType='MerchantName';sortReverse = !sortReverse">Merchant Name</th>
+                    <th>Price</th>
+                    <th class="hidden-480">Merchant Code</th>
+
+                    <th>
+                        <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+                        Created Date
+                    </th>
+                    <th class="hidden-480">Status</th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="d in data|orderBy : sortType: sortReverse">
+                <tr class="active">
+                    <td class="center">
+                        <label class="pos-rel">
+                            <input type="checkbox" class="ace" onclick="getValue(this)">
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+
+                    <td>
+                        <a href="#">{{d.MerchantName}}</a>
+                    </td>
+                    <td>$45</td>
+                    <td class="hidden-480">{{d.MerchantCode}}</td>
+                    <td>{{  d.CreatedDate|jsDate | date:"dd/MM/yyyy"  }}</td>
+
+                    <td class="hidden-480">
+                        <span class="label label-sm label-warning">Expiring</span>
+                    </td>
+
+                    <td>
+                        <div class="hidden-sm hidden-xs btn-group">
+                            <a class="btn btn-xs btn-success" href="@Url.Action("ViewMerchant")/{{d.MerchantId}}">
+                                <i class="ace-icon glyphicon glyphicon-check bigger-120"></i>
+                            </a>
+
+                            <button class="btn btn-xs btn-info">
+                                <i class="ace-icon glyphicon glyphicon-edit bigger-120"></i>
+                            </button>
+
+                            <button class="btn btn-xs btn-danger">
+                                <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                            </button>
+
+                            <button class="btn btn-xs btn-warning">
+                                <i class="ace-icon glyphicon glyphicon-bookmark bigger-120"></i>
+                            </button>
+                        </div>
+
+                        <div class="hidden-md hidden-lg">
+                            <div class="inline pos-rel">
+                                <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-primary dropdown-toggle">
+                                    <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                    <li>
+                                        <a title="" data-rel="tooltip" class="tooltip-info" href="#" data-original-title="View">
+                                            <span class="blue">
+                                                <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a title="" data-rel="tooltip" class="tooltip-success" href="#" data-original-title="Edit">
+                                            <span class="green">
+                                                <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a title="" data-rel="tooltip" class="tooltip-error" href="#" data-original-title="Delete">
+                                            <span class="red">
+                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7">
+                        <pagination ng-model="currentPage"
+                                    page="currentPage"
+                                    total-items="data.length"
+                                    max-size="maxSize"
+                                    boundary-links="true">
+                        </pagination>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        
+    </div>
+
+
+</div>
+
+@section scripts{
+
+
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/angular/app.js"></script>
+    <script src="~/angular/AdminController.js"></script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap.js"></script>
+    <script src="~/Scripts/angular-route.js"></script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap-tpls-0.12.0.js"></script>
+<script src="~/angular/MerchantController.js"></script>
+    <script type="text/javascript">
+        var urlName = '@Url.Action("GetMerchant")';
+
+        $(document).ready(function () {
+            var ischecked = false;
+            $(".headerace").click(function (e) {
+                var state = this.checked;
+                state ? $('.ace').prop('checked', true) : $(':checkbox').prop('checked', false);
+
+            });
+
+
+        });
+
+        function GetCustomer() {
+            var customerName = document.getElementById('txtCustomerName').value;
+            $.ajax({
+                url: '@Url.Action("GetCustomer")',
+
+                method: 'get',
+                data: { "customerName": customerName },
+                success: function (response) {
+                    alert(response[0]["CustomerName"]);
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            })
+        }
+
+        function getValue(value) {
+
+        }
+
+        function RedirectUrl(urlName) {
+            document.location.href = urlName;
+        }
+
+
+    </script>
+}
+

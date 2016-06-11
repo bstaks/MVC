@@ -1,0 +1,64 @@
+﻿@model List<MvcApplication1.CustomModel.MenuPermissionInfo>
+@{
+    var index = 1;
+    //  var permission = 0;
+}
+@foreach (MvcApplication1.CustomModel.MenuPermissionInfo item in Model.Where(m => m.ParentMenuId == (int)ViewData["Key"] && m.MenuType ==
+    (int)ViewData["MenuType"]).ToList())
+{
+    string name = "";
+    if (ViewData["Key"] != null)
+    {
+        name = Model.FirstOrDefault(m => m.MenuId == (int)ViewData["Key"]
+            ).Name.Replace(" ", "");
+
+
+        if (item.MenuType == (int)MvcApplication1.EnumsType.EnumTypes.MenuType.SubChild)
+        {
+            if (ViewData["Index"] != null)
+            {
+                index = (int)ViewData["Index"];
+            }
+
+            var parentMenu = (from m in Model where m.ParentMenuId == (int)ViewData["Key"] select m).ToList();
+            parentMenu = (from m in Model join p in parentMenu on m.MenuId equals p.ParentMenuId select m).ToList();
+            name = (from n in Model
+                    join t in
+                        parentMenu
+                    on n.MenuId equals t.ParentMenuId
+                    select n).FirstOrDefault().Name.Replace(" ", "");
+            ;
+        }
+    }
+    <tr>
+        <td>@item.Name</td>
+        @{
+    var id = name + index.ToString();
+    
+        }
+        <td>
+            @*<input type="checkbox" id="View_@id" name="View_@name" value="1" />*@
+            @Html.CheckBox("View_" + name + index.ToString(), ((MvcApplication1.Controllers.AdminController)ViewContext.Controller).isPermission(item.Permission, "View"), new { @value = "1|" + @item.MenuId, @onClick = "onClickChild(this,'View_" + name + "')" })
+        </td>
+        <td>
+            @*<input type="checkbox" name="Add_@name" value="2" />*@
+            @Html.CheckBox("Add_" + name + index.ToString(), ((MvcApplication1.Controllers.AdminController)ViewContext.Controller).isPermission(item.Permission, "Add"), new { @value = "2|" + @item.MenuId })
+        </td>
+        <td>
+            @*<input type="checkbox" name="Update_@name" value="4" />*@
+            @Html.CheckBox("Update_" + name + index.ToString(), ((MvcApplication1.Controllers.AdminController)ViewContext.Controller).isPermission(item.Permission, "Edit"), new { @value = "4|" + @item.MenuId })
+
+        </td>
+        <td>
+            @*<input type="checkbox" name="Delete_@name" value="8" />*@
+            @Html.CheckBox("Delete_" + name + index.ToString(), ((MvcApplication1.Controllers.AdminController)ViewContext.Controller).isPermission(item.Permission, "Delete"), new { @value = "8|" + @item.MenuId })
+
+        </td>
+    </tr>
+
+    index++;
+    @Html.Partial("_PartialChildMenuRole", Model, new ViewDataDictionary { { "Key", item.MenuId },
+{ "MenuType", (int)MvcApplication1.EnumsType.EnumTypes.MenuType.SubChild },{"Index",index} })
+
+}
+

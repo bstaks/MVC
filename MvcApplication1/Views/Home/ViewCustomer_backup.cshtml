@@ -1,0 +1,263 @@
+﻿@{
+    ViewBag.Title = "View Customer";
+}
+
+<h2>View Customer</h2>
+@section Scripts{
+    <script type="text/javascript" src="~/scripts/jquery.unobtrusive-ajax.js"></script>
+    
+    }
+@model List<MvcApplication1.DataModels.CustomerModels>
+
+@using (Html.BeginForm("ViewCustomer", "Home", FormMethod.Post, new { @id = "form1" }))
+{
+    <div class="row" id="pageRow">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="widget-title lighter">Search Customer</h5>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="form-search">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-9">
+                                <div class="input-group col-xs-9 col-sm-6">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </span>
+
+                                    <input type="text" id="txtCustomerCode" name="txtCustomerCode" maxlength="10" value="@ViewBag.CustomerCode" placeholder="Type your Customer Code" class="form-control col-xs-7 col-sm-5 ">
+
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-group-sm btn-primary" type="submit">
+                                            <span class="glyphicon glyphicon-search bigger-110"></span>
+                                            <b>Search</b>
+                                        </button>
+                                    </span>
+
+                                </div>
+                                @Html.ValidationMessage("txtCustomerCode")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+
+
+            <div class="clearfix">
+                <div class="pull-right tableTools-container">
+                    <div class="btn-group btn-overlap">
+                        <div class="ColVis btn-group" title="" data-original-title="Show/hide columns">
+                            <button class="ColVis_Button ColVis_MasterButton btn btn-white btn-info btn-bold">
+                                <span><i class="glyphicon glyphicon-search"></i></span>
+                            </button>
+                        </div><a class="DTTT_button btn btn-white btn-primary btn-bold" id="ToolTables_dynamic-table_0" tabindex="0" aria-controls="dynamic-table">
+                            <span>
+                                <i class="glyphicon glyphicon-copy bigger-110 pink"></i>
+                            </span>
+
+                        </a>
+                        <a class="DTTT_button btn btn-white btn-primary  btn-bold" id="ToolTables_dynamic-table_1" tabindex="0"
+                           aria-controls="dynamic-table">
+                            <span>
+                                <i class="glyphicon glyphicon-file bigger-110 green">
+                                </i>
+                            </span>
+                        </a>
+                        <a class="DTTT_button btn btn-white btn-primary  btn-bold" id="ToolTables_dynamic-table_2"
+                           tabindex="0" aria-controls="dynamic-table">
+                            <span>
+                                <i class="glyphicon glyphicon-file bigger-110 red"></i>
+                            </span>
+
+                        </a><a class="DTTT_button btn btn-white btn-primary  btn-bold" id="ToolTables_dynamic-table_3" title="" tabindex="0"
+                               aria-controls="dynamic-table" data-original-title="Print view">
+                            <span>
+                                <i class="glyphicon glyphicon-print bigger-110 grey"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-header widget-header-small">
+                <h5 class="widget-title lighter">Search Form</h5>
+            </div>
+            <div id="gridContainer">
+                <!--Grid Start-->
+                @Html.Partial("_PartialCustomerView")
+                <!-- Grid End-->
+                <!-- Pageing Controle Start-->
+                
+                <!--Paging Control End-->
+            </div>
+        </div>
+    </div>
+
+}
+@section Styles{
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/ui.jqgrid.css")" />
+
+    <style>
+        .input-group .input-group-addon {
+            border-radius: 0 !important;
+        }
+
+        .widget-box {
+            border: 1px solid #ccc;
+            box-shadow: none;
+            margin: 3px 0;
+            padding: 0;
+        }
+
+        .widget-header::before, .widget-header::after {
+            content: "";
+            display: table;
+            line-height: 0;
+        }
+
+        .widget-header::after {
+            clear: right;
+        }
+
+        .widget-header > .widget-title {
+            display: inline;
+            line-height: 36px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .widget-header-small {
+            min-height: 31px;
+            padding-left: 10px;
+        }
+
+        .widget-header {
+            background: #f7f7f7 linear-gradient(to bottom, #fff 0px, #eee 100%) repeat-x scroll 0 0;
+            border-bottom: 1px solid #ddd;
+            box-sizing: content-box;
+            color: #669fc7;
+            min-height: 38px;
+            padding-left: 12px;
+            position: relative;
+        }
+
+        .widget-body {
+            background-color: #fff;
+        }
+
+        .widget-main {
+            padding: 12px;
+        }
+
+            .widget-main > form {
+                margin-bottom: 0;
+            }
+
+        .bigger-110 {
+            font-size: 110% !important;
+        }
+        /*************Grid Css************/
+        .tableTools-container {
+            margin-bottom: 8px;
+        }
+
+        .btn-group:first-child {
+            margin-left: 0;
+        }
+
+        .btn.btn-white {
+            background-color: #337ab7 !important;
+            text-shadow: none !important;
+        }
+
+        .btn-info, .btn-info:focus {
+            background-color: #6fb3e0 !important;
+            border-color: #6fb3e0;
+        }
+
+        .dataTables_wrapper label {
+            display: inline-block;
+            font-size: 13px;
+        }
+
+        .dataTables_length label {
+            font-weight: 400;
+        }
+
+        .dataTables_filter {
+            text-align: right;
+        }
+
+        .dataTables_wrapper .row:first-child + .dataTable {
+            border-bottom: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+        }
+
+        table.dataTable {
+            clear: both;
+            max-width: none !important;
+        }
+
+
+        .dataTable {
+            margin-bottom: 0;
+        }
+
+            .dataTable > thead > tr > th.sorting_disabled::after {
+                display: none;
+            }
+
+
+        .position-relative, .pos-rel {
+            position: relative;
+        }
+
+        .dataTables_info {
+            font-size: 14px;
+        }
+
+        .action-buttons a {
+            display: inline-block;
+            margin: 0 3px;
+            opacity: 0.85;
+            transition: all 0.1s ease 0s;
+        }
+
+        .blue {
+            color: #478fca !important;
+        }
+
+        .red {
+            color: #ff0000 !important;
+        }
+
+        .green {
+            color: #00ff21 !important;
+        }
+
+        a.blue:hover {
+            background-color: transparent !important;
+            opacity: 1;
+            text-decoration: none;
+            transform: scale(1.2);
+        }
+
+        a.red:hover {
+            background-color: transparent !important;
+            opacity: 1;
+            text-decoration: none;
+            transform: scale(1.2);
+        }
+
+        a.green:hover {
+            background-color: transparent !important;
+            opacity: 1;
+            text-decoration: none;
+            transform: scale(1.2);
+        }
+        /*********jqgrid************/
+    </style>
+}

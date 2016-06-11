@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Edit Role";
+}
+
+<h2>Edit Role</h2>
+<div ng-app="myApp" ng-controller="AdminController">
+    <role-details></role-details>
+
+</div>
+@section scripts{
+
+
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/angular/app.js"></script>
+    <script src="~/angular/AdminController.js"></script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap.js"></script>
+    <script src="~/Scripts/angular-route.js"></script>
+
+    <script type="text/javascript">
+        var isViewAndEdit =false;
+        var menuList1 = @Html.Raw(ViewBag.MenuPermission)
+
+    </script>
+}

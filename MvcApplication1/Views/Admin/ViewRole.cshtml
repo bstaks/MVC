@@ -1,0 +1,990 @@
+﻿@model MvcApplication1.DataModels.aspnet_Role
+
+@{
+    ViewBag.Title = "View Role";
+}
+@section Scripts{
+
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/angular/app.js"></script>
+    <script src="~/angular/AdminController.js"></script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap.js"></script>
+    <script src="~/Scripts/angular-route.js"></script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap-tpls-0.12.0.js"></script>
+    <script src="~/angular/AdminController.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$(".ace").click(function () {
+               
+            //})
+        })
+
+    </script>
+}
+
+
+
+<div class="row" ng-app="myApp" ng-controller="AdminController">
+    <form name="frm1">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="widget-title lighter">Search Form</h5>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="form-search">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="input-group col-xs-7 col-sm-6">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </span>
+
+                                    <input type="text" placeholder="Type your Role Name" name="txtRoleName" required="required" class="form-control col-xs-7 col-sm-5 " ng-model="txtRoleName">
+
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-group-sm btn-primary" type="button" ng-click="SearchRole('@Url.Action("ViewRole")')">
+                                            <span class="glyphicon glyphicon-search bigger-110"></span>
+                                            <b>Search</b>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span ng-show="(frm1.txtRoleName.$invalid  && error)" class="danger">This is requried!</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div>
+
+        <div class="clearfix" ng-hide="roles.length == 0">
+            <div class="pull-right tableTools-container">
+                <div class="btn-group btn-overlap">
+                    <div class="ColVis btn-group" title="" data-original-title="Show/hide columns">
+                        <button class="ColVis_Button ColVis_MasterButton btn btn-white btn-info btn-bold">
+                            <span><i class="glyphicon glyphicon-search"></i></span>
+                        </button>
+                    </div><a class="DTTT_button btn btn-white btn-primary btn-bold" id="ToolTables_dynamic-table_0" tabindex="0" aria-controls="dynamic-table">
+                        <span>
+                            <i class="glyphicon glyphicon-copy bigger-110 pink"></i>
+                        </span>
+                        <div style="position: absolute; left: 0px; top: 0px; width: 41px; height: 35px; z-index: 99;" title=""
+                             data-original-title="Copy to clipboard">
+                            <embed width="41" height="35" align="middle" wmode="transparent" flashvars="id=1&amp;width=41&amp;height=35"
+                                   pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowfullscreen="false" allowscriptaccess="always" name="ZeroClipboard_TableToolsMovie_1" bgcolor="#ffffff" quality="best" menu="false" loop="false"
+                                   src="@Url.Content("~/assets/swf/copy_csv_xls_pdf.swf")" id="ZeroClipboard_TableToolsMovie_1">
+                        </div>
+                    </a>
+                    <a class="DTTT_button btn btn-white btn-primary  btn-bold" id="ToolTables_dynamic-table_1" tabindex="0"
+                       aria-controls="dynamic-table">
+                        <span>
+                            <i class="glyphicon glyphicon-file bigger-110 green">
+                            </i>
+                        </span><div style="position: absolute; left: 0px; top: 0px; width: 39px; height: 35px; z-index: 99;" title=""
+                                    data-original-title="Export to CSV">
+                            <embed width="39" height="35" align="middle" wmode="transparent"
+                                   flashvars="id=2&amp;width=39&amp;height=35" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowfullscreen="false" allowscriptaccess="always" name="ZeroClipboard_TableToolsMovie_2" bgcolor="#ffffff" quality="best" menu="false" loop="false"
+                                   src="@Url.Content("~/assets/swf/copy_csv_xls_pdf.swf")" id="ZeroClipboard_TableToolsMovie_2">
+                        </div>
+                    </a>
+                    <a class="DTTT_button btn btn-white btn-primary  btn-bold" id="ToolTables_dynamic-table_2"
+                       tabindex="0" aria-controls="dynamic-table">
+                        <span>
+                            <i class="glyphicon glyphicon-file bigger-110 red"></i>
+                        </span>
+                        <div style="position: absolute; left: 0px; top: 0px; width: 39px; height: 35px; z-index: 99;" title=""
+                             data-original-title="Export to PDF">
+                            <embed width="39" height="35" align="middle" wmode="transparent" flashvars="id=3&amp;width=39&amp;height=35"
+                                   pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"
+                                   allowfullscreen="false" allowscriptaccess="always" name="ZeroClipboard_TableToolsMovie_3" bgcolor="#ffffff"
+                                   quality="best" menu="false" loop="false" src="@Url.Content("~/assets/swf/copy_csv_xls_pdf.swf")" id="ZeroClipboard_TableToolsMovie_3">
+                        </div>
+                    </a><a class="DTTT_button btn btn-white btn-primary  btn-bold" id="ToolTables_dynamic-table_3" title="" tabindex="0"
+                           aria-controls="dynamic-table" data-original-title="Print view">
+                        <span>
+                            <i class="glyphicon glyphicon-print bigger-110 grey"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="widget-header widget-header-small" ng-hide="roles.length ==0">
+            <h5 class="widget-title lighter">Search Form</h5>
+        </div>
+
+
+        <table class="table table-striped table-bordered table-hover dataTable no-footer DTTT_selectable" id="dynamic-table" role="grid" aria-describedby="dynamic-table_info" ng-hide="roles.length ==0">
+            <thead>
+                <tr role="row">
+                    <th class="center sorting_disabled" rowspan="1" colspan="1" aria-label=" ">
+                        <label class="pos-rel">
+                            <input type="checkbox" class="header" ng-click="onSelect()">
+                            <span class="lbl"></span>
+                        </label>
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Domain: activate to sort column ascending">Domain</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" aria-label=""></th>
+                </tr>
+            </thead>
+
+            <tbody ng-repeat="d in roles.data">
+                <tr role="row" ng-class="$index%2 == 0 ? 'even':'odd'">
+                    <td class="center">
+                        <label class="pos-rel">
+                            <input type="checkbox" class="ace" ng-click="ChildCheckbox()">
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+
+                    <td>
+                        {{d.RoleName}}
+                    </td>
+                   
+
+                    <td>
+                        <div class="hidden-sm hidden-xs action-buttons">
+                            <a href="@Url.Action("DetailsRole")/{{d.RoleId}}" class="blue">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                            </a>
+
+                            <a href="@Url.Action("AddRole")/{{d.RoleId}}" class="green">
+                                <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                            </a>
+
+                            <a href="@Url.Action("DeleteRole")/{{d.RoleId}}" class="red">
+                                <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                            </a>
+                        </div>
+
+                        <div class="hidden-md hidden-lg">
+                            <div class="inline pos-rel">
+                                <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                    <li>
+                                        <a title="View" data-rel="tooltip" class="tooltip-info" href="#">
+                                            <span class="blue">
+                                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a title="Edit" data-rel="tooltip" class="tooltip-success" href="#">
+                                            <span class="green">
+                                                <i class="ace-icon glyphicon glyphicon-pencil bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a title="Delete" data-rel="tooltip" class="tooltip-error" href="#">
+                                            <span class="red">
+                                                <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <!--   <tr role="row" class="even">
+                       <td class="center">
+                           <label class="pos-rel">
+                               <input type="checkbox" class="ace">
+                               <span class="lbl"></span>
+                           </label>
+                       </td>
+
+                       <td>
+                           <a href="#">view.com</a>
+                       </td>
+                       <td>$45</td>
+                       <td class="hidden-480">4,100</td>
+                       <td class="sorting_1">Mar 12</td>
+
+                       <td class="hidden-480">
+                           <span class="label label-sm label-success">Registered</span>
+                       </td>
+
+                       <td>
+                           <div class="hidden-sm hidden-xs action-buttons">
+                               <a href="#" class="blue">
+                                   <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="green">
+                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="red">
+                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                               </a>
+                           </div>
+
+                           <div class="hidden-md hidden-lg">
+                               <div class="inline pos-rel">
+                                   <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                       <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-info" href="#" data-original-title="View">
+                                               <span class="blue">
+                                                   <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-success" href="#" data-original-title="Edit">
+                                               <span class="green">
+                                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-error" href="#" data-original-title="Delete">
+                                               <span class="red">
+                                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </td>
+                   </tr>
+                   <tr role="row" class="odd">
+                       <td class="center">
+                           <label class="pos-rel">
+                               <input type="checkbox" class="ace">
+                               <span class="lbl"></span>
+                           </label>
+                       </td>
+
+                       <td>
+                           <a href="#">above.com</a>
+                       </td>
+                       <td>$35</td>
+                       <td class="hidden-480">3,420</td>
+                       <td class="sorting_1">Mar 12</td>
+
+                       <td class="hidden-480">
+                           <span class="label label-sm label-warning">Expiring</span>
+                       </td>
+
+                       <td>
+                           <div class="hidden-sm hidden-xs action-buttons">
+                               <a href="#" class="blue">
+                                   <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="green">
+                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="red">
+                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                               </a>
+                           </div>
+
+                           <div class="hidden-md hidden-lg">
+                               <div class="inline pos-rel">
+                                   <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                       <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                       <li>
+                                           <a title="View" data-rel="tooltip" class="tooltip-info" href="#">
+                                               <span class="blue">
+                                                   <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="Edit" data-rel="tooltip" class="tooltip-success" href="#">
+                                               <span class="green">
+                                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="Delete" data-rel="tooltip" class="tooltip-error" href="#">
+                                               <span class="red">
+                                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </td>
+                   </tr>
+                   <tr role="row" class="even">
+                       <td class="center">
+                           <label class="pos-rel">
+                               <input type="checkbox" class="ace">
+                               <span class="lbl"></span>
+                           </label>
+                       </td>
+
+                       <td>
+                           <a href="#">max.com</a>
+                       </td>
+                       <td>$60</td>
+                       <td class="hidden-480">4,400</td>
+                       <td class="sorting_1">Mar 11</td>
+
+                       <td class="hidden-480">
+                           <span class="label label-sm label-warning">Expiring</span>
+                       </td>
+
+                       <td>
+                           <div class="hidden-sm hidden-xs action-buttons">
+                               <a href="#" class="blue">
+                                   <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="green">
+                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="red">
+                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                               </a>
+                           </div>
+
+                           <div class="hidden-md hidden-lg">
+                               <div class="inline pos-rel">
+                                   <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                       <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-info" href="#" data-original-title="View">
+                                               <span class="blue">
+                                                   <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-success" href="#" data-original-title="Edit">
+                                               <span class="green">
+                                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-error" href="#" data-original-title="Delete">
+                                               <span class="red">
+                                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </td>
+                   </tr>
+                   <tr role="row" class="odd">
+                       <td class="center">
+                           <label class="pos-rel">
+                               <input type="checkbox" class="ace">
+                               <span class="lbl"></span>
+                           </label>
+                       </td>
+
+                       <td>
+                           <a href="#">day.com</a>
+                       </td>
+                       <td>$55</td>
+                       <td class="hidden-480">5,600</td>
+                       <td class="sorting_1">Jan 29</td>
+
+                       <td class="hidden-480">
+                           <span class="label label-sm label-info arrowed arrowed-righ">Sold</span>
+                       </td>
+
+                       <td>
+                           <div class="hidden-sm hidden-xs action-buttons">
+                               <a href="#" class="blue">
+                                   <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="green">
+                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="red">
+                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                               </a>
+                           </div>
+
+                           <div class="hidden-md hidden-lg">
+                               <div class="inline pos-rel">
+                                   <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                       <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                       <li>
+                                           <a title="View" data-rel="tooltip" class="tooltip-info" href="#">
+                                               <span class="blue">
+                                                   <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="Edit" data-rel="tooltip" class="tooltip-success" href="#">
+                                               <span class="green">
+                                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="Delete" data-rel="tooltip" class="tooltip-error" href="#">
+                                               <span class="red">
+                                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </td>
+                   </tr>
+                   <tr role="row" class="even">
+                       <td class="center">
+                           <label class="pos-rel">
+                               <input type="checkbox" class="ace">
+                               <span class="lbl"></span>
+                           </label>
+                       </td>
+
+                       <td>
+                           <a href="#">pro.com</a>
+                       </td>
+                       <td>$55</td>
+                       <td class="hidden-480">4,250</td>
+                       <td class="sorting_1">Jan 21</td>
+
+                       <td class="hidden-480">
+                           <span class="label label-sm label-success">Registered</span>
+                       </td>
+
+                       <td>
+                           <div class="hidden-sm hidden-xs action-buttons">
+                               <a href="#" class="blue">
+                                   <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="green">
+                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="red">
+                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                               </a>
+                           </div>
+
+                           <div class="hidden-md hidden-lg">
+                               <div class="inline pos-rel">
+                                   <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                       <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-info" href="#" data-original-title="View">
+                                               <span class="blue">
+                                                   <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-success" href="#" data-original-title="Edit">
+                                               <span class="green">
+                                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-error" href="#" data-original-title="Delete">
+                                               <span class="red">
+                                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </td>
+                   </tr>
+                   <tr role="row" class="odd">
+                       <td class="center">
+                           <label class="pos-rel">
+                               <input type="checkbox" class="ace">
+                               <span class="lbl"></span>
+                           </label>
+                       </td>
+
+                       <td>
+                           <a href="#">great.com</a>
+                       </td>
+                       <td>$55</td>
+                       <td class="hidden-480">6,400</td>
+                       <td class="sorting_1">Feb 24</td>
+
+                       <td class="hidden-480">
+                           <span class="label label-sm label-success">Registered</span>
+                       </td>
+
+                       <td>
+                           <div class="hidden-sm hidden-xs action-buttons">
+                               <a href="#" class="blue">
+                                   <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="green">
+                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="red">
+                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                               </a>
+                           </div>
+
+                           <div class="hidden-md hidden-lg">
+                               <div class="inline pos-rel">
+                                   <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                       <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                       <li>
+                                           <a title="View" data-rel="tooltip" class="tooltip-info" href="#">
+                                               <span class="blue">
+                                                   <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="Edit" data-rel="tooltip" class="tooltip-success" href="#">
+                                               <span class="green">
+                                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="Delete" data-rel="tooltip" class="tooltip-error" href="#">
+                                               <span class="red">
+                                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </td>
+                   </tr>
+                   <tr role="row" class="even">
+                       <td class="center">
+                           <label class="pos-rel">
+                               <input type="checkbox" class="ace">
+                               <span class="lbl"></span>
+                           </label>
+                       </td>
+
+                       <td>
+                           <a href="#">up.com</a>
+                       </td>
+                       <td>$95</td>
+                       <td class="hidden-480">8,520</td>
+                       <td class="sorting_1">Feb 22</td>
+
+                       <td class="hidden-480">
+                           <span class="label label-sm label-info arrowed arrowed-righ">Sold</span>
+                       </td>
+
+                       <td>
+                           <div class="hidden-sm hidden-xs action-buttons">
+                               <a href="#" class="blue">
+                                   <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="green">
+                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="red">
+                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                               </a>
+                           </div>
+
+                           <div class="hidden-md hidden-lg">
+                               <div class="inline pos-rel">
+                                   <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                       <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-info" href="#" data-original-title="View">
+                                               <span class="blue">
+                                                   <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-success" href="#" data-original-title="Edit">
+                                               <span class="green">
+                                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-error" href="#" data-original-title="Delete">
+                                               <span class="red">
+                                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </td>
+                   </tr>
+                   <tr role="row" class="odd">
+                       <td class="center">
+                           <label class="pos-rel">
+                               <input type="checkbox" class="ace">
+                               <span class="lbl"></span>
+                           </label>
+                       </td>
+
+                       <td>
+                           <a href="#">sight.com</a>
+                       </td>
+                       <td>$58</td>
+                       <td class="hidden-480">6,100</td>
+                       <td class="sorting_1">Feb 19</td>
+
+                       <td class="hidden-480">
+                           <span class="label label-sm label-inverse arrowed-in">Flagged</span>
+                       </td>
+
+                       <td>
+                           <div class="hidden-sm hidden-xs action-buttons">
+                               <a href="#" class="blue">
+                                   <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="green">
+                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="red">
+                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                               </a>
+                           </div>
+
+                           <div class="hidden-md hidden-lg">
+                               <div class="inline pos-rel">
+                                   <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                       <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                       <li>
+                                           <a title="View" data-rel="tooltip" class="tooltip-info" href="#">
+                                               <span class="blue">
+                                                   <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="Edit" data-rel="tooltip" class="tooltip-success" href="#">
+                                               <span class="green">
+                                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="Delete" data-rel="tooltip" class="tooltip-error" href="#">
+                                               <span class="red">
+                                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </td>
+                   </tr>
+                   <tr role="row" class="even">
+                       <td class="center">
+                           <label class="pos-rel">
+                               <input type="checkbox" class="ace">
+                               <span class="lbl"></span>
+                           </label>
+                       </td>
+
+                       <td>
+                           <a href="#">base.com</a>
+                       </td>
+                       <td>$35</td>
+                       <td class="hidden-480">2,595</td>
+                       <td class="sorting_1">Feb 18</td>
+
+                       <td class="hidden-480">
+                           <span class="label label-sm label-success">Registered</span>
+                       </td>
+
+                       <td>
+                           <div class="hidden-sm hidden-xs action-buttons">
+                               <a href="#" class="blue">
+                                   <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="green">
+                                   <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
+                               </a>
+
+                               <a href="#" class="red">
+                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                               </a>
+                           </div>
+
+                           <div class="hidden-md hidden-lg">
+                               <div class="inline pos-rel">
+                                   <button data-position="auto" data-toggle="dropdown" class="btn btn-minier btn-yellow dropdown-toggle">
+                                       <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-info" href="#" data-original-title="View">
+                                               <span class="blue">
+                                                   <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-success" href="#" data-original-title="Edit">
+                                               <span class="green">
+                                                   <i class="glyphicon glyphicon-pencil bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a title="" data-rel="tooltip" class="tooltip-error" href="#" data-original-title="Delete">
+                                               <span class="red">
+                                                   <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                               </span>
+                                           </a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </td>
+                   </tr>  -->
+            </tbody>
+        </table>
+        @*<div class="row"><div class="col-xs-6"><div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">Showing 11 to 20 of 23 entries</div></div><div class="col-xs-6"><div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate"><ul class="pagination"><li class="paginate_button previous" aria-controls="dynamic-table" tabindex="0" id="dynamic-table_previous"><a href="#">Previous</a></li><li class="paginate_button " aria-controls="dynamic-table" tabindex="0"><a href="#">1</a></li><li class="paginate_button active" aria-controls="dynamic-table" tabindex="0"><a href="#">2</a></li><li class="paginate_button " aria-controls="dynamic-table" tabindex="0"><a href="#">3</a></li><li class="paginate_button next" aria-controls="dynamic-table" tabindex="0" id="dynamic-table_next"><a href="#">Next</a></li></ul></div></div></div>*@
+    </div>
+</div>
+
+
+@section Styles{
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/ui.jqgrid.css")" />
+
+    <style>
+        .input-group .input-group-addon {
+            border-radius: 0 !important;
+        }
+
+        .widget-box {
+            border: 1px solid #ccc;
+            box-shadow: none;
+            margin: 3px 0;
+            padding: 0;
+        }
+
+        .widget-header::before, .widget-header::after {
+            content: "";
+            display: table;
+            line-height: 0;
+        }
+
+        .widget-header::after {
+            clear: right;
+        }
+
+        .widget-header > .widget-title {
+            display: inline;
+            line-height: 36px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .widget-header-small {
+            min-height: 31px;
+            padding-left: 10px;
+        }
+
+        .widget-header {
+            background: #f7f7f7 linear-gradient(to bottom, #fff 0px, #eee 100%) repeat-x scroll 0 0;
+            border-bottom: 1px solid #ddd;
+            box-sizing: content-box;
+            color: #669fc7;
+            min-height: 38px;
+            padding-left: 12px;
+            position: relative;
+        }
+
+        .widget-body {
+            background-color: #fff;
+        }
+
+        .widget-main {
+            padding: 12px;
+        }
+
+            .widget-main > form {
+                margin-bottom: 0;
+            }
+
+        .bigger-110 {
+            font-size: 110% !important;
+        }
+        /*************Grid Css************/
+        .tableTools-container {
+            margin-bottom: 8px;
+        }
+
+        .btn-group:first-child {
+            margin-left: 0;
+        }
+
+        .btn.btn-white {
+            background-color: #337ab7 !important;
+            text-shadow: none !important;
+        }
+
+        .btn-info, .btn-info:focus {
+            background-color: #6fb3e0 !important;
+            border-color: #6fb3e0;
+        }
+
+        .dataTables_wrapper label {
+            display: inline-block;
+            font-size: 13px;
+        }
+
+        .dataTables_length label {
+            font-weight: 400;
+        }
+
+        .dataTables_filter {
+            text-align: right;
+        }
+
+        .dataTables_wrapper .row:first-child + .dataTable {
+            border-bottom: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+        }
+
+        table.dataTable {
+            clear: both;
+            max-width: none !important;
+        }
+
+
+        .dataTable {
+            margin-bottom: 0;
+        }
+
+            .dataTable > thead > tr > th.sorting_disabled::after {
+                display: none;
+            }
+
+
+        .position-relative, .pos-rel {
+            position: relative;
+        }
+
+        .dataTables_info {
+            font-size: 14px;
+        }
+
+        .action-buttons a {
+            display: inline-block;
+            margin: 0 3px;
+            opacity: 0.85;
+            transition: all 0.1s ease 0s;
+        }
+
+        .blue {
+            color: #478fca !important;
+        }
+
+        .red {
+            color: #ff0000 !important;
+        }
+
+        .green {
+            color: #00ff21 !important;
+        }
+
+        a.blue:hover {
+            background-color: transparent !important;
+            opacity: 1;
+            text-decoration: none;
+            transform: scale(1.2);
+        }
+
+        a.red:hover {
+            background-color: transparent !important;
+            opacity: 1;
+            text-decoration: none;
+            transform: scale(1.2);
+        }
+
+        a.green:hover {
+            background-color: transparent !important;
+            opacity: 1;
+            text-decoration: none;
+            transform: scale(1.2);
+        }
+        /*********jqgrid************/
+    </style>
+}

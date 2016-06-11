@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "Add Role";
+}
+@model List<MvcApplication1.CustomModel.MenuPermissionInfo>
+<h2>Add Role</h2>
+
+<div class="row">
+    @using (Html.BeginForm())
+    {
+        <table>
+            <tr>
+                <td colspan="2">
+                    @Html.ValidationSummary(true)
+                </td>
+            </tr>
+            <tr>
+                <td>Role Name</td>
+                <td><input type="text" id="txtRoleName" name="txtRoleName" value="@ViewBag.RoleName"></td>
+            </tr>
+        </table>
+
+        <table class="table table-bordered table-hover table-striped table-responsive">
+            @if (Model != null)
+            {
+                foreach (var item in Model.Where(m => m.MenuType == (int)MvcApplication1.EnumsType.EnumTypes.MenuType.Parent).ToList())
+                {
+                    <thead>
+                        <tr>
+                            <th>@item.Name</th>
+                            <th><input type="checkbox" name="View_@item.Name.Replace(" ","")" id="View_@item.Name.Replace(" ","")" onclick="IsCheck(this)" />View</th>
+                            <th><input type="checkbox" name="Add_@item.Name.Replace(" ","")" id="View_@item.Name.Replace(" ","")" onclick="IsCheck(this)" />Add</th>
+                            <th><input type="checkbox" name="Update_@item.Name.Replace(" ","")" id="View_@item.Name.Replace(" ","")" onclick="IsCheck(this)" />Update</th>
+                            <th><input type="checkbox" name="Delete_@item.Name.Replace(" ","")" id="View_@item.Name.Replace(" ","")" onclick="IsCheck(this)" />Delete</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ViewData["ParentMenuId"] = item.ParentMenuId;}
+                        @Html.Partial("_PartialChildMenuRole", Model, new ViewDataDictionary { { "Key", item.MenuId }, { "MenuType", (int)MvcApplication1.EnumsType.EnumTypes.MenuType.Child } })
+                    </tbody>
+                }
+            }
+            <tfoot>
+                <tr>
+                    <td colspan="4" align="center">
+                        <button class="btn btn-primary" name="btnSubmit" id="btnSubmit" value="Submit"><b><i class="glyphicon glyphicon-check">&nbsp;</i>Save</b></button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+</div>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function IsCheck(value) {
+            //   alert(value.name);
+            // var name = document.getElementsByTagName('input');
+            var name = document.querySelectorAll("input[type='checkbox']");
+            for (var i = 0; i < name.length; i++) {
+
+
+                if (name[i].type == "checkbox") {
+
+                    try {
+                        console.log(value.name + i.toString());
+                        var childCheckbox = document.getElementById(value.name + i);
+                        console.log(childCheckbox.checked);
+                        //  console.log(value.checked);
+                        if (value.checked == true) {
+                            childCheckbox.checked = true;
+                        } else {
+                            childCheckbox.checked = false;
+                        }
+                    } catch (e) {
+
+                    }
+                }
+            }
+
+        }
+
+        function onClickChild(value, headerCheckboxId) {
+            // var isChecked = document.getElementById(value.id).checked;
+            var isTrue = false;
+            var isChecked = document.querySelectorAll("[id*='" + headerCheckboxId + "']")
+           // console.log(isChecked);
+          
+                for (var i = 0; i < isChecked.length; i++) {
+                   
+                   
+                        var id =headerCheckboxId  + i;
+                        console.log(isChecked.length);
+                        if (document.getElementById(id) != null && document.getElementById(id).checked == true) {
+                            
+                            // document.getElementById(headerCheckboxId).checked = true;
+                            isChecked = true;
+                        }
+                    
+                   
+              
+            }
+            document.getElementById(headerCheckboxId).checked = isTrue;
+        }
+    </script>
+}

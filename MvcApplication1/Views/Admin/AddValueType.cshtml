@@ -1,0 +1,75 @@
+﻿@using MvcApplication1.Controllers;
+@model MvcApplication1.DataModels.ValueTypeModels
+@{
+    ViewBag.Title = "Value Type";
+}
+<h2>
+    Add Value Type</h2>
+@using (Html.BeginForm("AddValueType", "Admin", FormMethod.Post, new { @novalidate = "novalidate" }))
+{
+@Html.ValidationSummary(true)
+<fieldset>
+    <div class="editor-label">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.ValueTypeGroupId)
+        </div>
+    </div>
+    <div class="editor-field">
+        <div class="col-md-6">
+            @Html.DropDownListFor(m => m.ValueTypeGroupId, new List<SelectListItem>(), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ValueTypeGroupId)
+        </div>
+    </div>
+    <div class="col-md-12">
+        &nbsp;</div>
+    <div class="editor-label">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.ValueTypeId)
+        </div>
+    </div>
+    <div class="editor-field">
+        <div class="col-md-6">
+            @Html.TextBoxFor(model => model.ValueTypeId, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ValueTypeId)
+        </div>
+    </div>
+    <div class="col-md-12">
+        &nbsp;</div>
+    <div class="editor-label">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.ValueTypeName)
+        </div>
+    </div>
+    <div class="editor-field">
+        <div class="col-md-6">
+            @Html.TextBoxFor(model => model.ValueTypeName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ValueTypeName)
+        </div>
+    </div>
+    <div class="col-md-8">
+        &nbsp;</div>
+    <div class="col-md-8">
+        <input type="submit" value="Create" />
+    </div>
+</fieldset>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var valueTypeGroup = '';
+            $.ajax({
+                url: '@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "CommonAPI", action = "GetValueTypeGroup" })',
+                type: 'get',
+                success: function (data) {
+                    valueTypeGroup = valueTypeGroup + '<option>--Select--</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        valueTypeGroup = valueTypeGroup + '<option value= "' + data[i]['ValueTypeGroupId'] + '">' + data[i]['ValueTypeGroupName'] + '  (' + data[i]['ValueTypeGroupId'] + ')</option>';
+                    }
+                    $('#ValueTypeGroupId').append(valueTypeGroup);
+                }
+            });
+
+        });
+    </script>
+}

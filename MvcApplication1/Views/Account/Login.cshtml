@@ -1,0 +1,80 @@
+﻿@model MvcApplication1.Models.LoginModel
+@{
+    ViewBag.Title = "Log in";
+}
+<section id="loginForm">
+
+@if (Convert.ToBoolean(ViewData["IsVisible"]) == false)
+{
+    <hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+</hgroup>
+<h2>Use a local account to log in.</h2>
+    using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "login" }))
+    {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Log in Form</legend>
+        <table class="table">
+        <tr>
+        <td colspan="2">
+        <div class="col-md-4">  @Html.LabelFor(m => m.UserName)</div>
+       <div class="col-md-8">@Html.TextBoxFor(m => m.UserName)
+               <div class="col-md-12"> @Html.ValidationMessageFor(m => m.UserName)</div></div>
+        </td>
+       
+
+        </tr>
+        <tr>
+         <td colspan="2"><div class="form-group"><div class="col-md-4">  @Html.LabelFor(m => m.Password)</div>
+        <div class="col-md-8">  @Html.PasswordFor(m => m.Password)</div>
+          <div class="col-md-12">      @Html.ValidationMessageFor(m => m.Password)</div>
+          </div> 
+        </td>
+      
+
+        </tr>
+        
+        <tr>
+        <td>
+        </td>
+        <td> @Html.CheckBoxFor(m => m.RememberMe)
+                @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })</td>
+
+        </tr>
+        
+        <tr>
+        <td>
+        </td>
+        <td><input type="submit" value="Login" /></td>
+
+        </tr>
+        
+        </table>
+      
+    </fieldset>
+    <p>
+        @Html.ActionLink("Register", "Register") if you don't have an account.
+        <br />
+          @Html.ActionLink("Forget Password", "ForgetPassword", "Account")  
+
+    </p>
+    }
+
+
+}
+  @if (Convert.ToBoolean(ViewData["IsVisible"]) == true)
+  {           
+@Html.Partial("ForgetPassword")
+  }
+
+</section>
+<section class="social" id="socialLoginForm">
+    <h2>Use another service to log in.</h2>
+    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+</section>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

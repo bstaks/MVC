@@ -1,0 +1,258 @@
+﻿@model MvcApplication1.ViewModels.MerchantInfo
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Merchant Details</h2>
+@if (Request.IsAuthenticated)
+{
+    var title = new List<SelectListItem>();
+    title.Add(new SelectListItem() { Text = "Mr.", Value = "Mr" });
+    title.Add(new SelectListItem() { Text = "Mrs.", Value = "Mrs" });
+
+    using (Html.BeginForm())
+    {
+    @Html.ValidationSummary(true)    
+
+    <div class="form-horizontal col-md-6">
+        <fieldset>
+            <legend>Legend</legend>
+            <div class="form-group">
+                <label for="inputEmail" class="col-md-4 control-label">
+                    Merchant Code</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Merchant.MerchantCode, new { @class = "form-control", @readonly = "true" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword" class="col-md-4 control-label">
+                    Address</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Address.AddressLine, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Address.AddressLine)
+                </div>
+            </div>
+            <!-- inline style is just to demo custom css to put checkbox below input above -->
+            <div class="form-group">
+                <label for="select111" class="col-md-4 control-label">
+                    Country</label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(m => m.CountryId, new List<SelectListItem>(), new { @class = "form-control", @onchange = "GetState()" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="select111" class="col-md-4 control-label">
+                    City</label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(m => m.Address.CityId, new List<SelectListItem>(), new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="select111" class="col-md-4 control-label">
+                    Mobile</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Address.Mobile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Address.Mobile)
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="form-horizontal col-md-6">
+        <fieldset>
+            <legend>Legend</legend>
+            <div class="form-group">
+                <label for="inputEmail" class="col-md-4 control-label">
+                    Merchant Name</label>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(m => m.Merchant.Title, title, new { @class = "form-control" })
+                </div>
+                <div class="col-md-5">
+                    @Html.TextBoxFor(m => m.Merchant.MerchantName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Merchant.MerchantName)
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword" class="col-md-4 control-label">
+                    Address 2</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Address.AddressLine2, new { @class = "form-control" })
+             
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="select111" class="col-md-4 control-label">
+                    State</label>
+                <div class="col-md-8">
+
+                @Html.DropDownListFor(m => m.Address.StateId, new List<SelectListItem>(), new { @class = "form-control", @onchange = "GetCity()" })
+                    
+                </div>
+            </div>
+            <!-- inline style is just to demo custom css to put checkbox below input above -->
+            <div class="form-group">
+                <label for="select111" class="col-md-4 control-label">
+                    Pincode</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Address.Pincode, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Address.Pincode)
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="select111" class="col-md-4 control-label">
+                    Email id</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Address.Emailid, new { @class = "form-control" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="form-horizontal col-md-12">
+        <div class="form-group">
+            <div class="col-md-5 col-md-offset-5">
+                <button type="reset" class="btn btn-default">
+                    Cancel</button>
+                <input type="submit" class="btn btn-primary" id="submit" name="name" value="Submit" />
+                  
+            </div>
+        </div>
+    </div>
+    }
+
+
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+   
+
+        $(document).ready(function () {
+            $("#Customer_MerchantCode").removeClass("input-validation-error");
+
+        });
+        $.get('@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "CommonAPI", action = "GetCountry" })',
+    {
+        LocationType: 501
+
+    },
+    function (data, status) {
+    var selectedValue ='0';
+  @{
+  
+      var countryId = 0;
+      var stateId = 0;
+      var cityId =0;
+      if(Model != null && Model.Address != null){
+          countryId = Model.CountryId;
+      stateId = Model.Address.StateId;
+      cityId = Model.Address.CityId;
+      }
+      }
+      selectedValue = '@countryId';
+        $("#CountryId").html('');
+        var msg = '';
+        msg += '<option value="0">---Select---</option>';
+        for (var i = 0; i < data.length; i++) {
+            if (selectedValue != '0'){
+            msg += '<option value = ' + data[i]['LocationId'] + ' selected="selected">' + data[i]['LocatioName'] + '</option>'
+            }
+            else{
+            msg += '<option value = ' + data[i]['LocationId'] + '>' + data[i]['LocatioName'] + '</option>'
+            }
+        }
+        $("#CountryId").append(msg);
+        GetState();
+        GetCity();
+    });
+
+    function GetState(){
+    var countryValue = $("#CountryId").val();
+    //Address_StateId
+      $.get('@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "CommonAPI", action = "GetLocation" })',
+    {
+        LocationType: 502,
+        ParentLocationId : countryValue
+
+    },
+    function (data, status) {
+    var selectedValue ='0';
+    selectedValue = '@stateId';
+     $("#Address_StateId").html('');
+        var msg = '';
+        msg += '<option value="0">---Select---</option>';
+        for (var i = 0; i < data.length; i++) {
+            if (selectedValue != '0'){
+            msg += '<option value = ' + data[i]['LocationId'] + ' selected="selected">' + data[i]['LocatioName'] + '</option>'
+            }
+            else{
+            msg += '<option value = ' + data[i]['LocationId'] + '>' + data[i]['LocatioName'] + '</option>'
+            }
+        }
+        $("#Address_StateId").append(msg);
+    });
+    GetCity();
+    }
+
+     function GetCity(){
+    var countryValue = $("#Address_StateId").val() ;
+  
+    //Address_StateId
+
+    if(countryValue == null){
+    countryValue = '0';
+    }
+
+    if('@stateId' !='0'){
+    countryValue = '@stateId';
+    
+    }
+    if( $("#CountryId").val() == '0'){
+    
+    countryValue ='0';
+    }
+
+      $.get('@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "CommonAPI", action = "GetLocation" })',
+    {
+        LocationType: 503,
+        ParentLocationId : countryValue
+
+    },
+    function (data, status) {
+    var selectedValue ='0';
+     $("#Address_CityId").html('');
+    selectedValue = '@cityId';
+        var msg = '';
+        msg += '<option value="0">---Select---</option>';
+        for (var i = 0; i < data.length; i++) {
+            if (selectedValue != '0'){
+            msg += '<option value = ' + data[i]['LocationId'] + ' selected="selected">' + data[i]['LocatioName'] + '</option>'}
+            else{
+            msg += '<option value = ' + data[i]['LocationId'] + '>' + data[i]['LocatioName'] + '</option>'}
+        }
+        $("#Address_CityId").append(msg);
+    });
+    }
+
+     
+    </script>
+}
+@section styles{
+    @Styles.Render("~/Content/Abhishek")
+    <style>
+        .form-group label.control-label
+        {
+            font-size: 12px;
+            line-height: 1.07142857;
+            color: #000000;
+            font-weight: 400;
+            font-weight: bold;
+            margin: 5px 0 0 0;
+        }
+    </style>
+}
+

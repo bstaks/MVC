@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "ViewValueType";
+}
+@model dynamic
+@{
+    
+    
+    
+    int index = 0;
+    foreach (MvcApplication1.DataModels.ValueTypeModels item in Model.ValueType)
+    {
+        
+       @item.ValueTypeName
+    }
+    
+ 
+}
+<h2>
+    ViewValueType</h2>
