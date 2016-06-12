@@ -118,8 +118,17 @@ namespace MvcApplication1.Controllers
         [HttpGet]
         public ActionResult AddRole(string Id)
         {
-            
-            return View(MenuPermission(Id));
+
+            if (!string.IsNullOrEmpty(Id))
+            {
+                if(Request.QueryString["RoleName"] != null)
+                {
+                    ViewBag.RoleName = Request.QueryString["RoleName"].ToString();
+                }
+
+                return View(MenuPermission(Id)); 
+            }
+            return AddRole(null, null, null);
         }
 
 
@@ -200,9 +209,19 @@ namespace MvcApplication1.Controllers
                         {
                             // update role 
 
+                            role.RoleName = ViewBag.RoleName;
+                            dbContext.SaveChanges();
+
+                            List<aspnet_MenuPermission> menuPermission = dbContext.aspnet_MenuPermission.Where(m => m.RoleId == role.RoleId).ToList();
+                            foreach (aspnet_MenuPermission permission in menuPermission)
+                            {
+                                dbContext.aspnet_MenuPermission.Remove(permission);
+                                dbContext.SaveChanges();
+                            }
+                            AddPermissionForMenu(objMenuPermission, dbContext, role, 1);
                             // end update role
-                            ModelState.AddModelError("", "Role Already exists!");
-                            return View(menuList);
+                           // ModelState.AddModelError("", "Role Already exists!");
+                            return AddRole(role.RoleId.ToString());
                         }
                         role = new aspnet_Role();
                         role.RoleId = Guid.NewGuid();
@@ -210,18 +229,8 @@ namespace MvcApplication1.Controllers
                         dbContext.aspnet_Role.Add(role);
                         dbContext.SaveChanges();
                         int createdBy = (dbContext.aspnet_User.FirstOrDefault(m => m.UserName.ToLower() == HttpContext.User.Identity.Name.ToLower()).NumericUserId);
-                        foreach (var menuPermission in objMenuPermission)
-                        {
-                            aspnet_MenuPermission desmenuPermission = new aspnet_MenuPermission();
-                            desmenuPermission.Active = true;
-                            desmenuPermission.CreatedDate = DateTime.Now;
-                            desmenuPermission.MenuId = menuPermission.MenuId;
-                            desmenuPermission.Permission = menuPermission.Permission;
-                            desmenuPermission.RoleId = role.RoleId;
-                            desmenuPermission.CreatedBy = createdBy;
-                            dbContext.aspnet_MenuPermission.Add(desmenuPermission);
-                            dbContext.SaveChanges();
-                        }
+                        AddPermissionForMenu(objMenuPermission, dbContext, role, createdBy);
+                        return AddRole(role.RoleId.ToString());
                     }
                     else
                     {
@@ -243,6 +252,22 @@ namespace MvcApplication1.Controllers
             }
             //SqlHelpers.SqlHelper.ExecuteReader(System.Data.CommandType.StoredProcedure,"")
 
+        }
+
+        private static void AddPermissionForMenu(List<MvcApplication1.CustomModel.MenuPermissionInfo> objMenuPermission, ShoppingCart dbContext, aspnet_Role role, int createdBy)
+        {
+            foreach (var menuPermission in objMenuPermission)
+            {
+                aspnet_MenuPermission desmenuPermission = new aspnet_MenuPermission();
+                desmenuPermission.Active = true;
+                desmenuPermission.CreatedDate = DateTime.Now;
+                desmenuPermission.MenuId = menuPermission.MenuId;
+                desmenuPermission.Permission = menuPermission.Permission;
+                desmenuPermission.RoleId = role.RoleId;
+                desmenuPermission.CreatedBy = createdBy;
+                dbContext.aspnet_MenuPermission.Add(desmenuPermission);
+                dbContext.SaveChanges();
+            }
         }
 
 
