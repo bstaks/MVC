@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Add Role To User";
+}
+@section styles{
+    <link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+}
+<h2>Add Role To User</h2>
+
+<table class="table table-responsive">
+    <tr>
+        <td>
+            <div class="col-sm-5">
+
+                <div class="form-group">
+                    <label class="col-xs-4 control-label">Role Name</label>
+                    <div class="col-xs-5">
+                        <select id="multiSelect" class="form-control" name="browsers" multiple>
+                            <option value="chrome" selected="selected">Google Chrome</option>
+                            <option value="firefox">Firefox</option>
+                            <option value="ie">IE</option>
+                            <option value="safari">Safari</option>
+                            <option value="opera">Opera</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+            </div>
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="col-xs-4 control-label">Username</label>
+                    <div class="col-xs-5">
+                        <select id="userSelect" class="form-control" name="browsers" multiple>
+                            <option value="chrome" selected="selected">Google Chrome</option>
+                            <option value="firefox">Firefox</option>
+                            <option value="ie">IE</option>
+                            <option value="safari">Safari</option>
+                            <option value="opera">Opera</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="col-sm-3">
+                <div class="form-group"><button type="submit" class="btn btn-primary pull-right" ><i class="glyphicon glyphicon-saved"></i> Save</button></div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+
+
+@section scripts{
+    <script src="~/Scripts/jquery-1.10.0.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-multiselect.js"></script>
+    <script type="text/javascript">
+        var selectUsers = [];
+        $(document).ready(function () {
+            $('#multiSelect').multiselect({
+                enableFiltering: true,
+                includeSelectAllOption: true,
+            });
+            $('#userSelect').multiselect({
+                enableFiltering: true,
+                includeSelectAllOption: true,
+                checkbox: function (option) {
+                    var $closetSelect = $(option).closest("select");
+                    alert($closetSelect.id)
+                },
+                onChange: function (options, selected) {
+                    // alert($(options).val());
+                    //alert(1);
+                    selectUsers.push($(options).val());
+                    if (!selected) {
+                        selectUsers = jQuery.grep(selectUsers, function (n, i) {
+                            return n != $(options).val();
+                        })
+                    }
+                    console.log(selectUsers);
+                    //if (selected == true) {
+                    //    selectUsers = jQuery.grep(selectUsers, function (n, i) {
+                    //        console.log(i);
+                    //        if (n == $(options).val()) {
+                    //            return n;
+                    //        }
+                    //        else {
+                    //            selectUsers.push(n);
+                    //            return n;
+                    //        }
+                    //    })
+                    //} else {
+                    //    selectUsers = jQuery.grep(selectUsers, function (n, i) {
+                    //        console.log(n);
+                    //        //if (n == $(options).val()) {
+                    //        //    selectUsers.pop()
+                    //        //}
+                    //        return n != $(options).val();
+                    //    });
+                        
+                    //}
+
+                   
+                },
+                onSelectAll: function () {
+                   // alert(12);
+                }
+            });
+
+           
+              
+        });
+    </script>
+}

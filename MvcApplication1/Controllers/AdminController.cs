@@ -315,5 +315,10 @@ namespace MvcApplication1.Controllers
             MenuPermission(Id);
             return View();
         }
+
+        public ActionResult AddRoleToUser()
+        {
+            return View();
+        }
     }
 }
