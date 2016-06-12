@@ -152,11 +152,11 @@
                                 <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
                             </a>
 
-                            <a href="@Url.Action("AddRole")/{{d.RoleId}}" class="green">
+                            <a href="@Url.Action("AddRole")/{{d.RoleId}}?RoleName={{d.RoleName}}" class="green">
                                 <i class="ace-icon glyphicon glyphicon-pencil bigger-130"></i>
                             </a>
 
-                            <a href="@Url.Action("DeleteRole")/{{d.RoleId}}" class="red">
+                            <a href="@Url.Action("DeleteRole")/{{d.RoleId}}?RoleName={{d.RoleName}}" class="red">
                                 <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
                             </a>
                         </div>
