@@ -35,17 +35,21 @@
             <div class="col-sm-5">
                 <div class="form-group">
                     <label class="col-xs-4 control-label">Username</label>
-                    <div class="col-xs-5">
-                        <select id="userSelect" class="form-control" name="browsers" multiple>
-                            <option value="chrome" selected="selected">Google Chrome</option>
-                            <option value="firefox">Firefox</option>
-                            <option value="ie">IE</option>
-                            <option value="safari">Safari</option>
-                            <option value="opera">Opera</option>
-                            <option value="other">Other</option>
-                        </select>
+                    <div class="col-xs-7">
+                        <input type="text" class="form-control" />
+                        <input type="hidden" id="hdnUserId" />
                     </div>
-                </div>
+                        <!--<div class="col-xs-5">
+            <select id="userSelect" class="form-control" name="browsers" multiple>
+                <option value="chrome" selected="selected">Google Chrome</option>
+                <option value="firefox">Firefox</option>
+                <option value="ie">IE</option>
+                <option value="safari">Safari</option>
+                <option value="opera">Opera</option>
+                <option value="other">Other</option>
+            </select>
+        </div> -->
+                    </div>
 
                 <div class="clear"></div>
             </div>
@@ -54,7 +58,9 @@
     <tr>
         <td>
             <div class="col-sm-3">
-                <div class="form-group"><button type="submit" class="btn btn-primary pull-right" ><i class="glyphicon glyphicon-saved"></i> Save</button></div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-saved"></i> Save</button>
+                </div>
             </div>
         </td>
     </tr>
@@ -69,12 +75,18 @@
     <script src="~/Scripts/bootstrap-multiselect.js"></script>
     <script type="text/javascript">
         var selectUsers = [];
+        var isSelectedAll = false;
+        var Roles = @Html.Raw(ViewBag.Roles)
+
+           
+
+
         $(document).ready(function () {
             $('#multiSelect').multiselect({
                 enableFiltering: true,
                 includeSelectAllOption: true,
             });
-            $('#userSelect').multiselect({
+            $('#multiSelect').multiselect({
                 enableFiltering: true,
                 includeSelectAllOption: true,
                 checkbox: function (option) {
@@ -84,44 +96,55 @@
                 onChange: function (options, selected) {
                     // alert($(options).val());
                     //alert(1);
-                    selectUsers.push($(options).val());
+
+                    if ($('#multiSelect option:selected').length == 0) {
+                        selectUsers = [];
+                    }
+
+
+
+
                     if (!selected) {
                         selectUsers = jQuery.grep(selectUsers, function (n, i) {
+
                             return n != $(options).val();
                         })
-                    }
-                    console.log(selectUsers);
-                    //if (selected == true) {
-                    //    selectUsers = jQuery.grep(selectUsers, function (n, i) {
-                    //        console.log(i);
-                    //        if (n == $(options).val()) {
-                    //            return n;
-                    //        }
-                    //        else {
-                    //            selectUsers.push(n);
-                    //            return n;
-                    //        }
-                    //    })
-                    //} else {
-                    //    selectUsers = jQuery.grep(selectUsers, function (n, i) {
-                    //        console.log(n);
-                    //        //if (n == $(options).val()) {
-                    //        //    selectUsers.pop()
-                    //        //}
-                    //        return n != $(options).val();
-                    //    });
-                        
-                    //}
+                    } else {
+                        selectUsers = jQuery.grep(selectUsers, function (n, i) {
 
-                   
+                            return n != $(options).val();
+                        })
+                        if (typeof $(options).val() != "undefined") {
+                            alert($(options).val())
+                            selectUsers.push($(options).val());
+                        }
+                    }
+                    console.log(selectUsers)
+
+
+
                 },
                 onSelectAll: function () {
-                   // alert(12);
+                    var value = $("#multiSelect").val().toString();
+                    selectUsers = value.split(',');
+                    isSelectedAll = true;
+                },
+                deselectAll: function (justVisible) {
+                    alert(justVisible);
                 }
+
             });
 
-           
-              
+
+
         });
+        $("#multiSelect").html("");
+        jQuery.each(Roles, function (index, item) {
+            // do something with `item` (or `this` is also `item` if you like)
+            
+            $("#multiSelect").append("<option value='"+item.RoleId+"'>"+item.RoleName+"</option>")
+        })
+
+
     </script>
 }

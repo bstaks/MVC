@@ -318,7 +318,23 @@ namespace MvcApplication1.Controllers
 
         public ActionResult AddRoleToUser()
         {
+            using (ShoppingCart dbContext = new ShoppingCart())
+            {
+                var roles = dbContext.aspnet_Role.Select(m => new { m.RoleId, m.RoleName }).ToList();
+                ViewBag.Roles = Newtonsoft.Json.JsonConvert.SerializeObject(roles);
+            }
+
             return View();
         }
+
+        [HttpPost]
+        public JsonResult AddRoleToUser(string[] rolesId, string userId)
+        {
+            int result = 0;
+
+            return Json(result);
+        }
+
+
     }
 }
