@@ -9,6 +9,7 @@ using System.Transactions;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using MvcApplication1.Models;
 
 namespace MvcApplication1.Controllers
 {
@@ -246,6 +247,13 @@ namespace MvcApplication1.Controllers
         {
             TempData["Hi"] = "Hi";
             return RedirectToAction("Test2");
+        }
+
+        [HttpPost]
+        public ActionResult Test2(testModels testmodel)
+        {
+            TempData["Hi"] = "Hi";
+            return View("Test",testmodel);
         }
 
         public ActionResult Test2()

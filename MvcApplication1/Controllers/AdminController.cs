@@ -121,18 +121,19 @@ namespace MvcApplication1.Controllers
 
             if (!string.IsNullOrEmpty(Id))
             {
-                if(Request.QueryString["RoleName"] != null)
+                if (Request.QueryString["RoleName"] != null)
                 {
                     ViewBag.RoleName = Request.QueryString["RoleName"].ToString();
                 }
 
-                return View(MenuPermission(Id)); 
+                return View(MenuPermission(Id));
             }
             return AddRole(null, null, null);
         }
 
 
-        public bool isPermission(int permission,string ActionType){
+        public bool isPermission(int permission, string ActionType)
+        {
             if ((permission & (int)EnumsType.EnumTypes.PermissionType.View) == (int)EnumsType.EnumTypes.PermissionType.View && ActionType == Enum.GetName(typeof(MvcApplication1.EnumsType.EnumTypes.PermissionType), (int)EnumsType.EnumTypes.PermissionType.View))
             {
                 return true;
@@ -220,7 +221,7 @@ namespace MvcApplication1.Controllers
                             }
                             AddPermissionForMenu(objMenuPermission, dbContext, role, 1);
                             // end update role
-                           // ModelState.AddModelError("", "Role Already exists!");
+                            // ModelState.AddModelError("", "Role Already exists!");
                             return AddRole(role.RoleId.ToString());
                         }
                         role = new aspnet_Role();
@@ -293,18 +294,18 @@ namespace MvcApplication1.Controllers
 
             return View();
 
-            
+
         }
 
 
         private List<MvcApplication1.CustomModel.MenuPermissionInfo> MenuPermission(string Id)
         {
-             SqlParameter[] parameter = { new SqlParameter("@RoleId", Id) };
+            SqlParameter[] parameter = { new SqlParameter("@RoleId", Id) };
 
             using (ShoppingCart dbContext = new ShoppingCart())
             {
                 List<MvcApplication1.CustomModel.MenuPermissionInfo> menuPermission = dbContext.Database.SqlQuery<MvcApplication1.CustomModel.MenuPermissionInfo>("uspGetMenuPermissionbyRoleId @RoleId", parameter).ToList();
-                ViewBag.MenuPermission = Newtonsoft.Json.JsonConvert.SerializeObject(menuPermission,Newtonsoft.Json.Formatting.Indented);
+                ViewBag.MenuPermission = Newtonsoft.Json.JsonConvert.SerializeObject(menuPermission, Newtonsoft.Json.Formatting.Indented);
                 return menuPermission;
                 //return View(menuPermission);
             }
@@ -333,6 +334,16 @@ namespace MvcApplication1.Controllers
             int result = 0;
 
             return Json(result);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public JsonResult GetAllUsers(string q)
+        {
+            using (ShoppingCart dbContext = new ShoppingCart())
+            {
+                return Json(dbContext.aspnet_User.Where(m => m.UserName.Contains(q)).Select(m => new { m.UserName, m.UserId }).ToList(),JsonRequestBehavior.AllowGet);
+            }
         }
 
 

@@ -2,7 +2,75 @@
     ViewBag.Title = "Add Role To User";
 }
 @section styles{
+
+
+
     <link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/autocomplete.css" rel="stylesheet" />
+    <style>
+        .ui-autocomplete {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            float: left;
+            display: none;
+            min-width: 160px;
+            padding: 4px 0;
+            margin: 0 0 10px 25px;
+            list-style: none;
+            background-color: #ffffff;
+            border-color: #ccc;
+            border-color: rgba(0, 0, 0, 0.2);
+            border-style: solid;
+            border-width: 1px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -webkit-background-clip: padding-box;
+            -moz-background-clip: padding;
+            background-clip: padding-box;
+            *border-right-width: 2px;
+            *border-bottom-width: 2px;
+            max-height: 200px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+        }
+
+        .ui-menu-item > a.ui-corner-all {
+            display: block;
+            padding: 3px 15px;
+            clear: both;
+            font-weight: normal;
+            line-height: 18px;
+            color: #555555;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .ui-state-hover, .ui-state-active {
+            color: #ff0000;
+            text-decoration: none;
+            background-color: #0088cc;
+            border-radius: 0px;
+            -webkit-border-radius: 0px;
+            -moz-border-radius: 0px;
+            background-image: none;
+        }
+
+        .ui-corner-all {
+            border-radius: 0px !important;
+        }
+
+        .ui-menu-item:hover {
+            background-color: #ccc;
+        }
+    </style>
 }
 <h2>Add Role To User</h2>
 
@@ -36,20 +104,20 @@
                 <div class="form-group">
                     <label class="col-xs-4 control-label">Username</label>
                     <div class="col-xs-7">
-                        <input type="text" class="form-control" />
+                        <input type="text" id="txtUserName" class="form-control" />
                         <input type="hidden" id="hdnUserId" />
                     </div>
-                        <!--<div class="col-xs-5">
-            <select id="userSelect" class="form-control" name="browsers" multiple>
-                <option value="chrome" selected="selected">Google Chrome</option>
-                <option value="firefox">Firefox</option>
-                <option value="ie">IE</option>
-                <option value="safari">Safari</option>
-                <option value="opera">Opera</option>
-                <option value="other">Other</option>
-            </select>
-        </div> -->
-                    </div>
+                    <!--<div class="col-xs-5">
+                        <select id="userSelect" class="form-control" name="browsers" multiple>
+                            <option value="chrome" selected="selected">Google Chrome</option>
+                            <option value="firefox">Firefox</option>
+                            <option value="ie">IE</option>
+                            <option value="safari">Safari</option>
+                            <option value="opera">Opera</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div> -->
+                </div>
 
                 <div class="clear"></div>
             </div>
@@ -67,10 +135,9 @@
 </table>
 
 
-
-
 @section scripts{
-    <script src="~/Scripts/jquery-1.10.0.js"></script>
+    <script src="~/Scripts/jquery-1.10.0.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/bootstrap-multiselect.js"></script>
     <script type="text/javascript">
@@ -78,7 +145,7 @@
         var isSelectedAll = false;
         var Roles = @Html.Raw(ViewBag.Roles)
 
-           
+
 
 
         $(document).ready(function () {
@@ -141,9 +208,43 @@
         $("#multiSelect").html("");
         jQuery.each(Roles, function (index, item) {
             // do something with `item` (or `this` is also `item` if you like)
-            
-            $("#multiSelect").append("<option value='"+item.RoleId+"'>"+item.RoleName+"</option>")
+
+            $("#multiSelect").append("<option value='" + item.RoleId + "'>" + item.RoleName + "</option>")
         })
+
+        $("#txtUserName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetAllUsers")",
+
+                    dataType: "json",
+                    data: {
+                        q: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.UserName,
+                                value: item.UserName,
+                                Id: item.UserId
+                            };
+
+                        }));
+                    },
+
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+               //* alert(ui.item.Id);
+            },
+            open: function () {
+                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+            },
+            close: function () {
+                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+            }
+        });
 
 
     </script>

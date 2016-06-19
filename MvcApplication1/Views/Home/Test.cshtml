@@ -2,4 +2,26 @@
     ViewBag.Title = "Test";
 }
 
+@model MvcApplication1.Models.testModels
+
 <h2>Test</h2>
+@using (Html.BeginForm())
+{
+@Html.LabelFor(m => m.PhoneNumber)
+@Html.TextBoxFor(m => m.PhoneNumber)
+@Html.ValidationMessageFor(m => m.PhoneNumber)
+<input type="submit" value="Save" />        
+}
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#PhoneNumber").blur(function () {
+                if ($("#PhoneNumber").closest("span").is(":visible") == false) {
+                    $("#PhoneNumber").next("span").removeClass("field-validation-valid").addClass("field-validation-error")
+                    $("#PhoneNumber").next("span").html("hi i am error");
+                }//.removeClass("field-validation-valid").addClass("field-validation-error").html("hi i am error");
+
+            })
+        })
+    </script>
+}
