@@ -5,72 +5,72 @@
 
 
 
-    <link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
-    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
-    <link href="~/Content/themes/base/autocomplete.css" rel="stylesheet" />
-    <style>
-        .ui-autocomplete {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1000;
-            float: left;
-            display: none;
-            min-width: 160px;
-            padding: 4px 0;
-            margin: 0 0 10px 25px;
-            list-style: none;
-            background-color: #ffffff;
-            border-color: #ccc;
-            border-color: rgba(0, 0, 0, 0.2);
-            border-style: solid;
-            border-width: 1px;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            -webkit-background-clip: padding-box;
-            -moz-background-clip: padding;
-            background-clip: padding-box;
-            *border-right-width: 2px;
-            *border-bottom-width: 2px;
-            max-height: 200px;
-            overflow-y: auto;
-            /* prevent horizontal scrollbar */
-            overflow-x: hidden;
-        }
+<link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+<link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/autocomplete.css" rel="stylesheet" />
+<style>
+    .ui-autocomplete {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        float: left;
+        display: none;
+        min-width: 160px;
+        padding: 4px 0;
+        margin: 0 0 10px 25px;
+        list-style: none;
+        background-color: #ffffff;
+        border-color: #ccc;
+        border-color: rgba(0, 0, 0, 0.2);
+        border-style: solid;
+        border-width: 1px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding;
+        background-clip: padding-box;
+        *border-right-width: 2px;
+        *border-bottom-width: 2px;
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
 
-        .ui-menu-item > a.ui-corner-all {
-            display: block;
-            padding: 3px 15px;
-            clear: both;
-            font-weight: normal;
-            line-height: 18px;
-            color: #555555;
-            white-space: nowrap;
-            text-decoration: none;
-        }
+    .ui-menu-item > a.ui-corner-all {
+        display: block;
+        padding: 3px 15px;
+        clear: both;
+        font-weight: normal;
+        line-height: 18px;
+        color: #555555;
+        white-space: nowrap;
+        text-decoration: none;
+    }
 
-        .ui-state-hover, .ui-state-active {
-            color: #ff0000;
-            text-decoration: none;
-            background-color: #0088cc;
-            border-radius: 0px;
-            -webkit-border-radius: 0px;
-            -moz-border-radius: 0px;
-            background-image: none;
-        }
+    .ui-state-hover, .ui-state-active {
+        color: #ff0000;
+        text-decoration: none;
+        background-color: #0088cc;
+        border-radius: 0px;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+        background-image: none;
+    }
 
-        .ui-corner-all {
-            border-radius: 0px !important;
-        }
+    .ui-corner-all {
+        border-radius: 0px !important;
+    }
 
-        .ui-menu-item:hover {
-            background-color: #ccc;
-        }
-    </style>
+    .ui-menu-item:hover {
+        background-color: #ccc;
+    }
+</style>
 }
 <h2>Add Role To User</h2>
 
@@ -127,7 +127,7 @@
         <td>
             <div class="col-sm-3">
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-saved"></i> Save</button>
+                    <button type="button" id="btnSubmit" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-saved"></i> Save</button>
                 </div>
             </div>
         </td>
@@ -136,116 +136,147 @@
 
 
 @section scripts{
-    <script src="~/Scripts/jquery-1.10.0.min.js"></script>
-    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/bootstrap-multiselect.js"></script>
-    <script type="text/javascript">
-        var selectUsers = [];
-        var isSelectedAll = false;
-        var Roles = @Html.Raw(ViewBag.Roles)
+<script src="~/Scripts/jquery-1.10.0.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+<script type="text/javascript">
+    var selectUsers = [];
+    var isSelectedAll = false;
+    var Roles = @Html.Raw(ViewBag.Roles)
 
 
 
 
-        $(document).ready(function () {
-            $('#multiSelect').multiselect({
-                enableFiltering: true,
-                includeSelectAllOption: true,
-            });
-            $('#multiSelect').multiselect({
-                enableFiltering: true,
-                includeSelectAllOption: true,
-                checkbox: function (option) {
-                    var $closetSelect = $(option).closest("select");
-                    alert($closetSelect.id)
-                },
-                onChange: function (options, selected) {
-                    // alert($(options).val());
-                    //alert(1);
+    $(document).ready(function () {
+        $('#multiSelect').multiselect({
+            enableFiltering: true,
+            includeSelectAllOption: true,
+        });
+        $('#multiSelect').multiselect({
+            enableFiltering: true,
+            includeSelectAllOption: true,
+            checkbox: function (option) {
+                var $closetSelect = $(option).closest("select");
+                alert($closetSelect.id)
+            },
+            onChange: function (options, selected) {
+                // alert($(options).val());
+                //alert(1);
 
-                    if ($('#multiSelect option:selected').length == 0) {
-                        selectUsers = [];
-                    }
-
-
-
-
-                    if (!selected) {
-                        selectUsers = jQuery.grep(selectUsers, function (n, i) {
-
-                            return n != $(options).val();
-                        })
-                    } else {
-                        selectUsers = jQuery.grep(selectUsers, function (n, i) {
-
-                            return n != $(options).val();
-                        })
-                        if (typeof $(options).val() != "undefined") {
-                            alert($(options).val())
-                            selectUsers.push($(options).val());
-                        }
-                    }
-                    console.log(selectUsers)
-
-
-
-                },
-                onSelectAll: function () {
-                    var value = $("#multiSelect").val().toString();
-                    selectUsers = value.split(',');
-                    isSelectedAll = true;
-                },
-                deselectAll: function (justVisible) {
-                    alert(justVisible);
+                if ($('#multiSelect option:selected').length == 0) {
+                    selectUsers = [];
                 }
 
-            });
 
 
 
-        });
-        $("#multiSelect").html("");
-        jQuery.each(Roles, function (index, item) {
-            // do something with `item` (or `this` is also `item` if you like)
+                if (!selected) {
+                    selectUsers = jQuery.grep(selectUsers, function (n, i) {
 
-            $("#multiSelect").append("<option value='" + item.RoleId + "'>" + item.RoleName + "</option>")
-        })
+                        return n != $(options).val();
+                    })
+                } else {
+                    selectUsers = jQuery.grep(selectUsers, function (n, i) {
 
-        $("#txtUserName").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "@Url.Action("GetAllUsers")",
+                        return n != $(options).val();
+                    })
+                    if (typeof $(options).val() != "undefined") {
+                        alert($(options).val())
+                        selectUsers.push($(options).val());
+                    }
+                }
+                console.log(selectUsers)
 
-                    dataType: "json",
-                    data: {
-                        q: request.term
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.UserName,
-                                value: item.UserName,
-                                Id: item.UserId
-                            };
 
-                        }));
-                    },
 
-                });
             },
-            minLength: 2,
-            select: function (event, ui) {
-               //* alert(ui.item.Id);
+            onSelectAll: function () {
+                var value = $("#multiSelect").val().toString();
+                selectUsers = value.split(',');
+                isSelectedAll = true;
             },
-            open: function () {
-                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
-            },
-            close: function () {
-                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+            deselectAll: function (justVisible) {
+                alert(justVisible);
             }
+
         });
 
 
-    </script>
+
+    });
+    $("#multiSelect").html("");
+    jQuery.each(Roles, function (index, item) {
+        // do something with `item` (or `this` is also `item` if you like)
+        //alert(item.isChecked)
+        if (item.isChecked != "") {
+            $("#multiSelect").append("<option value='" + item.RoleId + "' selected='" + item.isChecked + "'>" + item.RoleName + "</option>")
+
+        } else {
+            $("#multiSelect").append("<option value='" + item.RoleId + "'>" + item.RoleName + "</option>")
+        }
+    })
+
+    $("#txtUserName").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "@Url.Action("GetAllUsers")",
+
+                dataType: "json",
+                data: {
+                    q: request.term
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.UserName,
+                            value: item.UserName,
+                            Id: item.UserId
+                        };
+
+                    }));
+                },
+
+            });
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            //* alert(ui.item.Id)
+            $("#hdnUserId").val(ui.item.Id)
+        },
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+    });
+
+    $("#btnSubmit").click(function () {
+        var selectedRules = [];
+        $('#multiSelect option:selected').each(function (index, item) {
+            selectedRules.push(new String(item.value));
+        })
+        if (selectedRules.length == 0 || $("#hdnUserId").val()) {
+            return;
+        }
+        $.ajax({
+            url: "@Url.Action("AddRoleToUser")",
+            method: 'post',
+            dataType: "json",
+            data: {
+                "rolesId": selectedRules, "userId": $("#hdnUserId").val()
+            },
+            success: function (data) {
+
+            },
+            error: function (err) {
+                alert(err.statusText)
+            }
+
+        });
+    })
+
+
+</script>
 }
