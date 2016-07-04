@@ -193,6 +193,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminApiController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonAPI.cs" />
     <Compile Include="Controllers\CustomerAPI.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="DI\DependencyResolvers.cs" />
     <Compile Include="DI\Idenpendency.cs" />
     <Compile Include="EnumsType\EnumTypes.cs" />
+    <Compile Include="Helpres\HtmlHelpers.cs" />
     <Compile Include="Logger\Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -400,6 +402,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery-1.10.0.min.map" />
+    <Content Include="Views\Admin\ViewUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

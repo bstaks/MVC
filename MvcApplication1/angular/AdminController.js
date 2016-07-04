@@ -4,14 +4,32 @@
     $scope.error = false;
     // $scope.txtRoleName = '';
     //debugger;
-    $scope.SearchRole = function (url) {
+
+
+    $scope.SearchUsers = function (urlName) {
         $scope.error = false;
         if ($scope.frm1.txtRoleName.$invalid) {
             $scope.error = true;
             return;
         }
+        var postValue = { 'userName': $scope.txtUserName };
+    }
 
-        var postValue = { 'roleName': $scope.txtRoleName };
+
+
+    $scope.SearchRole = function (url) {
+        $scope.error = false;
+        if ($scope.frm1.txtRoleName.$invalid) {
+            $scope.error = true;
+            return;
+            $scope.role = Common.postData(url, postValue).then(function (response) {
+                $scope.roles = response;
+                $scope.isShow = response.data.length > 0;
+                console.log(response);
+            }, function (response) { })
+        };
+
+        var postValue = { 'UserName': $scope.txtRoleName, 'commanName': 'SearchUsers' };
         $scope.role = Common.postData(url, postValue).then(function (response) {
             $scope.roles = response;
             $scope.isShow = response.data.length > 0;

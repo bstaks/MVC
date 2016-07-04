@@ -317,9 +317,9 @@ namespace MvcApplication1.Controllers
             return View();
         }
 
-        public ActionResult AddRoleToUser()
+        public ActionResult AddRoleToUser(Guid? userId = null)
         {
-            Guid uGuid = new Guid("C56D127A-2C33-42FA-AD09-2B5EE715BE17");
+            // Guid uGuid = userId.HasValue ? Guid.NewGuid() : userId.Value;// new Guid("C56D127A-2C33-42FA-AD09-2B5EE715BE17");
             //using (ShoppingCart dbContext = new ShoppingCart())
             //{
             //    var roles = dbContext.aspnet_Role.Select(m => new { m.RoleId, m.RoleName }).ToList();
@@ -339,7 +339,7 @@ namespace MvcApplication1.Controllers
                     m.RoleId,
                     m.RoleName,
                     isChecked =
-                        (dbContext.aspnet_UserInRoles.FirstOrDefault(u => u.UserId == uGuid && m.RoleId == u.RoleId).UserId == uGuid ? "selected" :"")
+                        ((dbContext.aspnet_UserInRoles.FirstOrDefault(u => userId != null && u.UserId == userId && m.RoleId == u.RoleId).UserId == userId && userId != null) ? "selected" : "")
                 }).ToList();
                 ViewBag.Roles = Newtonsoft.Json.JsonConvert.SerializeObject(roles);
             }
@@ -350,7 +350,8 @@ namespace MvcApplication1.Controllers
 
 
         // Send Id through Temp data then compare userId
-      //  [ActionName("AddRoleToUser")]
+        [ActionName("AddRoleToUser")]
+        [HttpPost]
         public ActionResult AddRoleToUserPost()
         {
             Guid uGuid = new Guid("C56D127A-2C33-42FA-AD09-2B5EE715BE17");
@@ -379,20 +380,23 @@ namespace MvcApplication1.Controllers
         public JsonResult AddRoleToUser(string[] rolesId, string userId)
         {
             int result = 0;
+
+            Guid userGuid = new Guid(userId);
+
             using (ShoppingCart dbContext = new ShoppingCart())
             {
                 List<aspnet_UsersInRoles> objExitsUserInRoles = new List<aspnet_UsersInRoles>();
-               // objExitsUserInRoles = dbContext.aspnet_UserInRoles.Where(m => m.UserId == userId).ToList();
-                //dbContext.aspnet_UserInRoles.RemoveRange(objExitsUserInRoles);
-                //dbContext.SaveChanges();
-                //foreach (Guid roleId in rolesId)
-                //{
-                //    aspnet_UsersInRoles userInRole = new aspnet_UsersInRoles();
-                //    userInRole.RoleId = roleId;
-                //    userInRole.UserId = userId;
-                //    dbContext.aspnet_UserInRoles.Add(userInRole);
-                //    result = dbContext.SaveChanges();
-                //}
+                objExitsUserInRoles = dbContext.aspnet_UserInRoles.Where(m => m.UserId == userGuid).ToList();
+                dbContext.aspnet_UserInRoles.RemoveRange(objExitsUserInRoles);
+                dbContext.SaveChanges();
+                foreach (string roleId in rolesId)
+                {
+                    aspnet_UsersInRoles userInRole = new aspnet_UsersInRoles();
+                    userInRole.RoleId = new Guid(roleId);
+                    userInRole.UserId = userGuid;
+                    dbContext.aspnet_UserInRoles.Add(userInRole);
+                    result = dbContext.SaveChanges();
+                }
             }
 
 
@@ -407,6 +411,21 @@ namespace MvcApplication1.Controllers
             {
                 return Json(dbContext.aspnet_User.Where(m => m.UserName.Contains(q)).Select(m => new { m.UserName, m.UserId }).ToList(), JsonRequestBehavior.AllowGet);
             }
+        }
+
+
+        public ActionResult ViewUser(string UserName = null, string commanName = null)
+        {
+            if (commanName == "SearchUsers")
+            {
+                using (ShoppingCart dbContext = new ShoppingCart())
+                {
+                    return Json(dbContext.aspnet_User.Include("UserInRoles").Where (m => m.UserName == UserName).Select(m => new { UserName = m.UserName, UserInRoles = string.Join(",", (from r in dbContext.aspnet_Role join uin in m.UserInRoles on r.RoleId equals uin.RoleId select r).ToList()) }), JsonRequestBehavior.AllowGet);
+
+                }
+            }
+
+            return View();
         }
 
 
