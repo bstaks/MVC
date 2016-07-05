@@ -41,7 +41,7 @@
                                     <input type="text" placeholder="Type your User Name" name="txtUserName" required="required" class="form-control col-xs-7 col-sm-5 " ng-model="txtRoleName">
 
                                     <span class="input-group-btn">
-                                        <button class="btn btn-group-sm btn-primary" type="button" ng-click="SearchUser('@Url.Action("ViewUsers")')">
+                                        <button class="btn btn-group-sm btn-primary" type="button" ng-click="SearchUsers('@Url.Action("ViewUser")')">
                                             <span class="glyphicon glyphicon-search bigger-110"></span>
                                             <b>Search</b>
                                         </button>
@@ -124,8 +124,8 @@
                             <span class="lbl"></span>
                         </label>
                     </th>
-                    <th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Domain: activate to sort column ascending">Domain</th>
-                    <th class="sorting_disabled" rowspan="1" colspan="1" aria-label=""></th>
+                    <th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Domain: activate to sort column ascending">UserName</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" aria-label="">Role Name</th>
                 </tr>
             </thead>
 
@@ -142,7 +142,7 @@
                         {{d.UserName}}
                     </td>
                     <td>
-                        {{d.RoleName}}
+                        {{d.RoleName | ContentLength}}
                     </td>
 
 

@@ -8,11 +8,17 @@
 
     $scope.SearchUsers = function (urlName) {
         $scope.error = false;
-        if ($scope.frm1.txtRoleName.$invalid) {
+        if ($scope.frm1.txtUserName.$invalid) {
             $scope.error = true;
             return;
         }
-        var postValue = { 'userName': $scope.txtUserName };
+        var postValue = { 'userName': $scope.txtUserName, 'commanName': 'SearchUsers' };
+        $scope.role = Common.postData(urlName, postValue).then(function (response) {
+           // alert(response);
+            $scope.roles = response;
+            $scope.isShow = response.data.length > 0;
+            console.log(response);
+        }, function (response) { })
     }
 
 
@@ -22,11 +28,7 @@
         if ($scope.frm1.txtRoleName.$invalid) {
             $scope.error = true;
             return;
-            $scope.role = Common.postData(url, postValue).then(function (response) {
-                $scope.roles = response;
-                $scope.isShow = response.data.length > 0;
-                console.log(response);
-            }, function (response) { })
+           
         };
 
         var postValue = { 'UserName': $scope.txtRoleName, 'commanName': 'SearchUsers' };
@@ -71,6 +73,17 @@
     }
 
 });
+
+app.filter('ContentLength', function () {
+    return function (value) {
+        console.log(value)
+        if(value != null)
+        if (value.length > 10) {
+            return value.substring(0,9) + '..'
+        }
+        return value;
+    }
+})
 
 
 app.filter('ParentMenu', function () {

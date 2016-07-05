@@ -420,8 +420,14 @@ namespace MvcApplication1.Controllers
             {
                 using (ShoppingCart dbContext = new ShoppingCart())
                 {
-                    return Json(dbContext.aspnet_User.Include("UserInRoles").Where (m => m.UserName == UserName).Select(m => new { UserName = m.UserName, UserInRoles = string.Join(",", (from r in dbContext.aspnet_Role join uin in m.UserInRoles on r.RoleId equals uin.RoleId select r).ToList()) }), JsonRequestBehavior.AllowGet);
+                    //var result = dbContext.aspnet_User.Include("UserInRoles").Select(m => new { UserName = m.UserName, UserInRoles = string.Join(",", (from r in dbContext.aspnet_Role join uin in m.UserInRoles on r.RoleId equals uin.RoleId select r).ToList()) });
+                    //var result = dbContext.aspnet_User.Include("UserInRoles").Select(m => m).ToList();
+                    //var userInRoles = dbContext.aspnet_User.Include("UserInRoles").Select(m => new MvcApplication1 .Models.ViewUserModels() { UserName = m.UserName, RoleNames  = string.Join(",", (from r in dbContext.aspnet_Role join uin in m.UserInRoles on r.RoleId equals uin.RoleId select r).ToList()) });             
+                    //return Json(dbContext.aspnet_User.Include("UserInRoles").Select(m => new { UserName = m.UserName, UserInRoles = string.Join(",", (from r in dbContext.aspnet_Role join uin in m.UserInRoles on r.RoleId equals uin.RoleId select r).ToList()) }), JsonRequestBehavior.AllowGet);
 
+                    SqlParameter[] parameter = { };
+                    var result = dbContext.Database.SqlQuery<MvcApplication1.Models.ViewUserModels>("uspGetUserWithRole", parameter).ToList();
+                    return Json(result, JsonRequestBehavior.AllowGet);
                 }
             }
 

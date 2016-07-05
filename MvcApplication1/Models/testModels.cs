@@ -14,4 +14,9 @@ namespace MvcApplication1.Models
         [Required]
         public string PhoneNumber { get; set; }
     }
+
+    public class ViewUserModels {
+        public string UserName { get; set; }
+        public string RoleName { get; set; }
+    }
 }
